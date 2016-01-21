@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-	/* Structure creation */
+	/* Créations des structures */
 
 struct node {
 	int x_node;
@@ -21,8 +21,8 @@ struct edge {
 };
 typedef struct edge edge;
 
-	/* functions creation */
+	/* Créations des fonctions */
 
-char** str_split(char* a_str, const char a_delim);
+
 
 #endif
