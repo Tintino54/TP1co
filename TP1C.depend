@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1453467507 source:/home/etudiant/Bureau/Combinatorial Optimization/TP1C/TP1co/fonctions.c
+	"fonctions.h"
+
+1453374312 /home/etudiant/Bureau/Combinatorial Optimization/TP1C/TP1co/fonctions.h
+	<stdio.h>
+	<stdlib.h>
+
+1453467516 source:/home/etudiant/Bureau/Combinatorial Optimization/TP1C/TP1co/main.c
+	"fonctions.h"
+

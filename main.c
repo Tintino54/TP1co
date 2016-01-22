@@ -1,63 +1,21 @@
 #include "fonctions.h"
 int main(int argc, char *argv[])
 {
-     FILE * fp;
-       char * line = NULL;
-       char ** exploded_string;
-       int number_vertices;
-       int number_edges;
-       size_t len = 0;
-       ssize_t read;
+char * filename = "GINISTY_Valentin.txt";
 
-       fp = fopen("GINISTY_Valentin.txt", "r");
-       if (fp == NULL)
-           exit(EXIT_FAILURE);
+int number_vertices = 0;
+int number_edges = 0;
 
-        read = getline(&line, &len, fp);
-        int line_counter = 1;
-        exploded_string = str_split(line, ' ');
-        number_vertices = atoi(exploded_string[0]);
-        number_edges = atoi(exploded_string[1]);
+//get the number of vertices and the number of edges
 
-        node nodes[number_vertices];
-        edge edges[number_edges];
+read_get_sizes(filename, &number_vertices, &number_edges);
 
-        int node_counter = 0;
-        int edge_counter = 0;
+node nodes[number_vertices];
+edge edges[number_edges];
 
-       while ((read = getline(&line, &len, fp)) != -1) {
-        //line = current line
-           //printf("Retrieved line of length %zu :\n", read);
-           //pour tous les noeuds
-           if(line_counter <= number_vertices){
-                printf("noeud : ");
+//instanciate the arrays by reading the file
+read_create_arrays(filename, &nodes, &edges, number_vertices, number_edges);
 
-                exploded_string = str_split(line, ' ');
-                node new_node;
-                new_node.x_node = atoi(exploded_string[0]);
-                new_node.y_node = atoi(exploded_string[1]);
-                new_node.id_node = node_counter+1;
-                nodes[node_counter] = new_node;
-
-                node_counter++;
-           }
-           //pour tous les arcs
-           else{
-                printf("arc : ");
-
-                exploded_string = str_split(line, ' ');
-                edge new_edge;
-                new_edge.node_a = atoi(exploded_string[0]);
-                new_edge.node_b = atoi(exploded_string[1]);
-                new_edge.cost = atof(exploded_string[2]);
-                edges[edge_counter] = new_edge;
-
-                edge_counter++;
-           }
-            printf("%s", line);
-
-            line_counter++;
-       }
 
 int i;
         for(i = 0; i < number_vertices; i++){
@@ -74,10 +32,6 @@ int j;
             printf("\n");
         }
 
-       fclose(fp);
-       if (line)
-           free(line);
-       exit(EXIT_SUCCESS);
 
     return 0;
 }

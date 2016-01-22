@@ -24,5 +24,6 @@ typedef struct edge edge;
 	/* functions creation */
 
 char** str_split(char* a_str, const char a_delim);
-
+void read_get_sizes(char * filename, int * number_vertices, int * number_edges);
+void read_create_arrays(char * filename, node * nodes, edge * edges, int number_vertices, int number_edges);
 #endif
