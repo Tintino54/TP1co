@@ -25,14 +25,23 @@ typedef struct edge edge;
 struct element{
 	edge val;
 	edge * suiv;
+	edge * parent;
 };
 typedef struct element * edge_list;
 	
 
 	/* functions creation */
 
-void sort_by_cost(edge tab_edge[], unsigned int size_tab_edge);
 
-edge_list kruskal(node tab_node[], edge * tab_edge[], unsigned int size_tab_node, unsigned int size_tab_edge);
+void sort_by_cost(edge * tab_edge[], unsigned int size_tab_edge);
+
+int find(int parent[], int id_node);
+
+void Union(int * parent[], int id_node1, int id_node2);
+
+int* kruskal(edge tab_edge[], unsigned int size_tab_node, unsigned int size_tab_edge);
+
+//char** str_split(char* a_str, const char a_delim);
+
 
 #endif
