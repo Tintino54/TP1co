@@ -41,7 +41,10 @@ void Union(int * parent[], int id_node1, int id_node2);
 
 int* kruskal(edge tab_edge[], unsigned int size_tab_node, unsigned int size_tab_edge);
 
-//char** str_split(char* a_str, const char a_delim);
+char** str_split(char* a_str, const char a_delim);
 
+void read_get_sizes(char * filename, int * number_vertices, int * number_edges);
+
+void read_create_arrays(char * filename, node * nodes, edge * edges, int number_vertices, int number_edges);
 
 #endif
