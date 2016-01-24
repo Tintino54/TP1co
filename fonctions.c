@@ -50,7 +50,6 @@ int* kruskal(edge tab_edge[], unsigned int size_tab_node, unsigned int size_tab_
 			G_size++;
 		}
 		e++;
-		printf("e=%d G=%d \n", e, G_size);
 	}
 	return edge_MST;
 }
@@ -125,13 +124,14 @@ void read_get_sizes(char * filename, int * number_vertices, int * number_edges){
 }
 
 void read_create_arrays(char * filename, node * nodes, edge * edges, int number_vertices, int number_edges){
-        FILE * fp;
+       FILE * fp;
        char * line = NULL;
        char ** exploded_string;
        size_t len = 0;
        ssize_t read;
+       int i;
 
-       fp = fopen("GINISTY_Valentin.txt", "r");
+       fp = fopen(filename, "r");
        if (fp == NULL)
            exit(EXIT_FAILURE);
 
@@ -144,32 +144,57 @@ void read_create_arrays(char * filename, node * nodes, edge * edges, int number_
         //line = current line
            //printf("Retrieved line of length %zu :\n", read);
            //pour tous les noeuds
-           if(line_counter <= number_vertices){
+           if (line_counter <= number_vertices) {
                 exploded_string = str_split(line, ' ');
                 node new_node;
                 new_node.x_node = atoi(exploded_string[0]);
                 new_node.y_node = atoi(exploded_string[1]);
                 new_node.id_node = node_counter+1;
                 nodes[node_counter] = new_node;
-
                 node_counter++;
            }
            //pour tous les arcs
-           else{
+           else {
                 exploded_string = str_split(line, ' ');
                 edge new_edge;
                 new_edge.node_a = atoi(exploded_string[0]);
                 new_edge.node_b = atoi(exploded_string[1]);
                 new_edge.cost = atof(exploded_string[2]);
                 edges[edge_counter] = new_edge;
-
                 edge_counter++;
            }
-
-            line_counter++;
-            }
-            fclose(fp);
-       if (line)
-           free(line);
-
+			line_counter++;
+		}
+		fclose(fp);
+		if (line)
+			free(line);
 }
+
+
+void create_latex_file(edge tab_edge[], node tab_node[], unsigned int size_tab_edge, unsigned int size_tab_node) {
+	FILE * fichier = NULL;
+	fichier = fopen("G.tex", "w+");
+	int i;
+	if (fichier != NULL) {
+		fputs("\\documentclass{article}\n\\usepackage{pstricks}\n\\usepackage{pst-node}\n\\usepackage[top=2cm, bottom=2cm, left=2cm , right=2cm]{geometry}\n\\begin{document}\n\\centering \\large{\\tt G.tex}\n", fichier);
+		fputs("\\begin{pspicture*}(-0.5,-0.5)(1.5,1.5)\n", fichier);
+		for (i = 0; i < size_tab_node; ++i) 
+			fprintf(fichier, "\\cnode(%d,%d){0.22cm}{%d}\\rput(%d,%d){\\tt %d}\n",tab_node[i].x_node, tab_node[i].y_node, tab_node[i].id_node, tab_node[i].x_node, tab_node[i].y_node, tab_node[i].id_node);
+		
+		fputs("% edges\n",fichier);
+		
+		for (i = 0; i < size_tab_edge; ++i) 
+			fprintf(fichier, "\\ncline {-}{%d}{%d}\n", tab_edge[i].node_a, tab_edge[i].node_b);
+			
+		fputs("\\end{pspicture*}\n", fichier);
+		fputs("\\end{document}", fichier);
+	}
+	else exit(EXIT_FAILURE);
+	fclose(fichier);
+}
+
+
+void create_latex_file_MST(edge tab_edge[], node tab_node[], edge tab_edge_MST[]){
+	
+}
+

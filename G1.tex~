@@ -1,0 +1,9 @@
+\documentclass{article}
+\usepackage{pstricks}
+\usepackage{pst-node}
+\usepackage[top=2cm, bottom=2cm, left=2cm , right=2cm]{
+geometry}
+\begin{document}
+\centering \large{\tt G.tex}
+% Insert  the code of Figure 1 (d) here
+\end{document}
