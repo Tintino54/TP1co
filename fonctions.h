@@ -47,8 +47,10 @@ void read_get_sizes(char * filename, int * number_vertices, int * number_edges);
 
 void read_create_arrays(char * filename, node * nodes, edge * edges, int number_vertices, int number_edges);
 
-void create_latex_file(edge tab_edge[], node tab_node[], unsigned int size_tab_edge, unsigned int size_tab_node);
+void head_latex_file(edge tab_edge[], node tab_node[], unsigned int size_tab_node, unsigned int size_tab_edge, char * file_name);
 
-void create_latex_file_MST(edge tab_edge[], node tab_node[], edge tab_edge_MST[]);
+void create_latex_file(edge tab_edge[], node tab_node[], unsigned int size_tab_node, unsigned int size_tab_edge);
+
+void create_latex_file_MST(edge tab_edge[], node tab_node[], int * tab_edge_MST, unsigned int size_tab_node, unsigned int size_tab_edge);
 
 #endif

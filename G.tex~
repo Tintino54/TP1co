@@ -4,7 +4,7 @@
 \usepackage[top=2cm, bottom=2cm, left=2cm , right=2cm]{geometry}
 \begin{document}
 \centering \large{\tt G.tex}
-\begin{pspicture*}(-0.5,-0.5)(1.5,1.5)
+\begin{pspicture*}(50,50)(25,50)
 \cnode(2,13){0.22cm}{1}\rput(2,13){\tt 1}
 \cnode(7,40){0.22cm}{2}\rput(7,40){\tt 2}
 \cnode(19,29){0.22cm}{3}\rput(19,29){\tt 3}
@@ -56,7 +56,6 @@
 \cnode(10,2){0.22cm}{49}\rput(10,2){\tt 49}
 \cnode(17,5){0.22cm}{50}\rput(17,5){\tt 50}
 % edges
-\ncline {-}{1}{2}
 \ncline {-}{4}{45}
 \ncline {-}{8}{46}
 \ncline {-}{9}{18}

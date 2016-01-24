@@ -1,7 +1,7 @@
 #include "fonctions.h"
 
 /*
- * Trie un tableau de 
+ * Trie un tableau d'arc par poids croissant
  * */
 void sort_by_cost(edge * tab_edge[], unsigned int size_tab_edge) {
 	int i, j;
@@ -16,13 +16,18 @@ void sort_by_cost(edge * tab_edge[], unsigned int size_tab_edge) {
 		}
 	}
 }
-
+/*
+ * Détermine le noeud représentant du sous_ensemble de noeud contenant id_node
+ * */
 int find(int parent[], int id_node){
 	if (parent[id_node] != id_node) { printf(""); 
 		parent[id_node] = find(parent, parent[id_node]);}
 	return parent[id_node];
 }
 
+/*
+ * Uni deux sous_ensemble de noeuds
+ * */
 void Union(int * parent[], int id_node1, int id_node2){
 	
 	int root_node2 = find(*parent, id_node2);
@@ -30,7 +35,9 @@ void Union(int * parent[], int id_node1, int id_node2){
 		(*parent)[root_node2] = find(*parent, id_node1); //Le noeud représentant du sous_ensemble de id_node2 prend la valeur du noeud représentant du sous ensemble de id_node1
 }
 
-
+/*
+ * Calcul et retourne un tableau contenant les indices des arcs présent dans le MST 
+ * */
 int* kruskal(edge tab_edge[], unsigned int size_tab_node, unsigned int size_tab_edge) {
 	int * edge_MST; // Tableau d'indices des arcs présent dans l'arbre couvrant minimum
 	int G_size = 0; // nombre d'arc rentré dans l'arbre couvrant minimum
@@ -43,7 +50,7 @@ int* kruskal(edge tab_edge[], unsigned int size_tab_node, unsigned int size_tab_
 	for (i=1; i <= size_tab_node; ++i) { // Chaque noeud est initialisé comme son propre parent
 		parent[i] = i;
 	}
-	while (G_size < size_tab_node-1) {
+	while (G_size < size_tab_node-1) { //Tant que le nombre d'arc trouvé est inérieur aux nombre de noeuds -1
 		if (find(parent, tab_edge[e].node_a) != find(parent, tab_edge[e].node_b)) {
 			edge_MST[G_size] = e;
 			Union(&parent, tab_edge[e].node_a, tab_edge[e].node_b);
@@ -54,7 +61,9 @@ int* kruskal(edge tab_edge[], unsigned int size_tab_node, unsigned int size_tab_
 	return edge_MST;
 }
 
-
+/*
+ * Fragmente une chaine de caractère par un délimiteur et renvoi un tableau contenant chaque fragment de la chaine de caractère
+ * */
 char** str_split(char* a_str, const char a_delim)
 {
     char** result = 0;
@@ -65,7 +74,7 @@ char** str_split(char* a_str, const char a_delim)
     delim[0] = a_delim;
     delim[1] = 0;
 
-    /* Count how many elements will be extracted. */
+    //Compte combien d'éléments seront extraits
     while (*tmp)
     {
         if (a_delim == *tmp)
@@ -76,11 +85,10 @@ char** str_split(char* a_str, const char a_delim)
         tmp++;
     }
 
-    /* Add space for trailing token. */
+    // Add space for trailing token.
     count += last_comma < (a_str + strlen(a_str) - 1);
 
-    /* Add space for terminating null string so caller
-       knows where the list of returned strings ends. */
+    //Add space for terminating null string so caller knows where the list of returned strings ends.
    count++;
 
     result = malloc(sizeof(char*) * count);
@@ -101,7 +109,9 @@ char** str_split(char* a_str, const char a_delim)
     return result;
 }
 
-
+/*
+ * Lit dans le fichier text contenant le graphe le nombre d'arcs et le nombre de noeuds
+ * */
 void read_get_sizes(char * filename, int * number_vertices, int * number_edges){
     FILE * fp;
        char * line = NULL;
@@ -114,7 +124,6 @@ void read_get_sizes(char * filename, int * number_vertices, int * number_edges){
            exit(EXIT_FAILURE);
 
         read = getline(&line, &len, fp);
-        int line_counter = 1;
         exploded_string = str_split(line, ' ');
         *number_vertices = atoi(exploded_string[0]);
         *number_edges = atoi(exploded_string[1]);
@@ -123,13 +132,15 @@ void read_get_sizes(char * filename, int * number_vertices, int * number_edges){
            free(line);
 }
 
+/*
+ * Créer le tableaux contenant tout les arcs, et celui contenant tout les noeuds
+ * */
 void read_create_arrays(char * filename, node * nodes, edge * edges, int number_vertices, int number_edges){
        FILE * fp;
        char * line = NULL;
        char ** exploded_string;
        size_t len = 0;
        ssize_t read;
-       int i;
 
        fp = fopen(filename, "r");
        if (fp == NULL)
@@ -141,8 +152,6 @@ void read_create_arrays(char * filename, node * nodes, edge * edges, int number_
         int edge_counter = 0;
 
        while ((read = getline(&line, &len, fp)) != -1) {
-        //line = current line
-           //printf("Retrieved line of length %zu :\n", read);
            //pour tous les noeuds
            if (line_counter <= number_vertices) {
                 exploded_string = str_split(line, ' ');
@@ -170,31 +179,65 @@ void read_create_arrays(char * filename, node * nodes, edge * edges, int number_
 			free(line);
 }
 
-
-void create_latex_file(edge tab_edge[], node tab_node[], unsigned int size_tab_edge, unsigned int size_tab_node) {
+/*
+ * Ecris le début du fichier latex, ainsi que tout les noeuds
+ * */
+void head_latex_file(edge tab_edge[], node tab_node[], unsigned int size_tab_node, unsigned int size_tab_edge, char * file){
 	FILE * fichier = NULL;
-	fichier = fopen("G.tex", "w+");
+	fichier = fopen(file, "w+");
 	int i;
 	if (fichier != NULL) {
 		fputs("\\documentclass{article}\n\\usepackage{pstricks}\n\\usepackage{pst-node}\n\\usepackage[top=2cm, bottom=2cm, left=2cm , right=2cm]{geometry}\n\\begin{document}\n\\centering \\large{\\tt G.tex}\n", fichier);
-		fputs("\\begin{pspicture*}(-0.5,-0.5)(1.5,1.5)\n", fichier);
+		fputs("\\psscalebox{0.35}\n{", fichier);
+		fputs("\\begin{pspicture*}(0,0)(50,50)\n", fichier);
 		for (i = 0; i < size_tab_node; ++i) 
-			fprintf(fichier, "\\cnode(%d,%d){0.22cm}{%d}\\rput(%d,%d){\\tt %d}\n",tab_node[i].x_node, tab_node[i].y_node, tab_node[i].id_node, tab_node[i].x_node, tab_node[i].y_node, tab_node[i].id_node);
+			fprintf(fichier, "\\cnode(%d,%d){1cm}{%d}\\rput(%d,%d){\\tt %d}\n",tab_node[i].x_node, tab_node[i].y_node, tab_node[i].id_node, tab_node[i].x_node, tab_node[i].y_node, tab_node[i].id_node);
 		
 		fputs("% edges\n",fichier);
-		
+	}
+	else exit(EXIT_FAILURE);
+	fclose(fichier);
+	
+}
+
+
+/*
+ * Ecris le fichier latex "G.tex" qui affiche tout les arcs du graphe 
+ * */
+void create_latex_file(edge tab_edge[], node tab_node[], unsigned int size_tab_node, unsigned int size_tab_edge) {
+	FILE * fichier = NULL;
+	char * file_name = "G.tex";
+	int i;
+	head_latex_file(tab_edge, tab_node, size_tab_node, size_tab_edge, file_name);
+	fichier = fopen(file_name, "a");
+	if (fichier != NULL) { 	
 		for (i = 0; i < size_tab_edge; ++i) 
 			fprintf(fichier, "\\ncline {-}{%d}{%d}\n", tab_edge[i].node_a, tab_edge[i].node_b);
 			
-		fputs("\\end{pspicture*}\n", fichier);
+		fputs("\\end{pspicture*}}\n", fichier);
 		fputs("\\end{document}", fichier);
 	}
 	else exit(EXIT_FAILURE);
 	fclose(fichier);
 }
 
-
-void create_latex_file_MST(edge tab_edge[], node tab_node[], edge tab_edge_MST[]){
-	
+/*
+ * Ecris le fichier latex "G.kruskal.tex" qui contient seulement les arcs présent dans le MST
+ * */
+void create_latex_file_MST(edge tab_edge[], node tab_node[], int * tab_edge_MST, unsigned int size_tab_node, unsigned int size_tab_edge){
+	FILE * fichier = NULL;
+	int i;
+	char * file_name = "G.kruskal.tex";
+	head_latex_file(tab_edge, tab_node, size_tab_node, size_tab_edge, file_name);
+	fichier = fopen(file_name, "a");
+	if (fichier != NULL) {
+		for (i = 0; i < size_tab_node-1; ++i)
+			fprintf(fichier,"\\ncline[linecolor=red,linewidth = 3pt]{-}{%d}{%d}\n", tab_edge[tab_edge_MST[i]].node_a, tab_edge[tab_edge_MST[i]].node_b);
+		
+		fputs("\\end{pspicture*}}\n", fichier);
+		fputs("\\end{document}", fichier);
+	}
+	else exit(EXIT_FAILURE);
+	fclose(fichier);
 }
 
